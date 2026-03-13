@@ -15,28 +15,188 @@ Claude Opus 4.6 已于 2026 年 2 月 5 日发布，目前已在多个客户端�
 | Microsoft Foundry | ✅ 可用 | 通过 Azure 控制台配置 |
 | Claude Code CLI | ✅ 默认模型（v2.1.73+） | 自动使用 |
 
-## 在 Cursor 中使用 Opus 4.6
+## 如何在 Cursor 中添加和使用 Opus 4.6
 
-Cursor IDE 提供了多个 Opus 4.6 变体供选择：
+### 前提条件
 
-- **Non-Thinking, High Effort**：适用于日常编码、文档处理和通用任务
-- **Non-Thinking, Max Effort**：适用于深度搜索和全面信息检索
-- **Thinking, High Effort**：适用于复杂编码、调试和代码审查
-- **Thinking, Max Effort**：适用于前沿推理和最困难的问题
-- **Fast Mode**：更快的变体，适用于对速度敏感的场景
+- 安装最新版本的 Cursor IDE（从 [cursor.sh](https://cursor.sh) 下载）
+- 拥有 Cursor 账号并登录（个人计划每月包含 $20 的 API 使用额度）
 
-## 通过 API 使用 Opus 4.6
+### 方法一：通过模型下拉菜单选择（推荐）
 
-通过 Claude API 调用时，使用模型标识符 `claude-opus-4-6`：
+1. **打开 Cursor 聊天面板**
+   - 使用快捷键 `Cmd + L`（macOS）或 `Ctrl + L`（Windows/Linux）打开 Chat
+   - 或使用 `Cmd + I` / `Ctrl + I` 打开 Composer
+
+2. **找到模型下拉菜单**
+   - 在 AI 输入框的下方，有一个模型选择下拉菜单
+   - 默认可能显示为 `Auto` 或其他已选模型
+
+3. **选择 Claude Opus 4.6**
+   - 点击下拉菜单，在列表中找到 `Claude Opus 4.6` 相关选项
+   - 根据需要选择合适的变体：
+     - **Non-Thinking, High Effort** — 日常编码、文档处理、通用任务
+     - **Non-Thinking, Max Effort** — 深度搜索和全面信息检索
+     - **Thinking, High Effort** — 复杂编码、调试和代码审查
+     - **Thinking, Max Effort** — 前沿推理和最困难的问题
+     - **Fast Mode** — 对速度敏感的场景
+
+4. **开始使用**
+   - 选择模型后，直接在输入框中输入问题或指令即可
+
+### 方法二：通过设置页面添加模型
+
+1. **打开 Cursor 设置**
+   - 使用快捷键 `Cmd + ,`（macOS）或 `Ctrl + ,`（Windows/Linux）
+   - 或点击左下角齿轮图标进入设置
+
+2. **导航到模型设置**
+   - 进入 **Cursor Settings > Models > Model Names**
+
+3. **添加模型**
+   - 如果 `Claude Opus 4.6` 没有出现在默认列表中，可以手动添加
+   - 在模型名称输入框中输入 `claude-opus-4-6` 并确认
+
+4. **返回聊天面板使用**
+   - 添加后，模型将出现在下拉菜单中可供选择
+
+### 方法三：通过 Inline Edit 使用
+
+1. 在编辑器中选中一段代码
+2. 按 `Cmd + K`（macOS）或 `Ctrl + K`（Windows/Linux）
+3. 在弹出的输入框下方选择 `Claude Opus 4.6`
+4. 输入修改指令
+
+### 常用快捷键速查
+
+| 功能 | macOS | Windows/Linux |
+|---|---|---|
+| 打开 Chat | `Cmd + L` | `Ctrl + L` |
+| 打开 Composer | `Cmd + I` | `Ctrl + I` |
+| Inline Edit | `Cmd + K` | `Ctrl + K` |
+| Terminal AI | 在终端中 `Cmd + K` | 在终端中 `Ctrl + K` |
+| 打开设置 | `Cmd + ,` | `Ctrl + ,` |
+
+## 如何通过 Claude Code CLI 使用 Opus 4.6
+
+### 安装或更新 Claude Code
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+确保版本 ≥ 2.1.73，该版本已将默认模型升级为 Opus 4.6。
+
+```bash
+claude --version
+```
+
+### 直接使用
+
+Claude Code CLI v2.1.73+ 默认使用 Opus 4.6，直接运行即可：
+
+```bash
+claude
+```
+
+## 如何通过 API 使用 Opus 4.6
+
+### Python（使用 Anthropic SDK）
+
+```bash
+pip install anthropic
+```
 
 ```python
 import anthropic
 
-client = anthropic.Anthropic()
+client = anthropic.Anthropic(api_key="your-api-key")
 
 message = client.messages.create(
     model="claude-opus-4-6",
     max_tokens=1024,
+    messages=[
+        {"role": "user", "content": "Hello, Claude!"}
+    ]
+)
+
+print(message.content[0].text)
+```
+
+### TypeScript/JavaScript（使用 Anthropic SDK）
+
+```bash
+npm install @anthropic-ai/sdk
+```
+
+```typescript
+import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic({ apiKey: "your-api-key" });
+
+const message = await client.messages.create({
+  model: "claude-opus-4-6",
+  max_tokens: 1024,
+  messages: [
+    { role: "user", content: "Hello, Claude!" }
+  ],
+});
+
+console.log(message.content[0].text);
+```
+
+### 使用 Extended Thinking（推理模式）
+
+```python
+import anthropic
+
+client = anthropic.Anthropic(api_key="your-api-key")
+
+message = client.messages.create(
+    model="claude-opus-4-6",
+    max_tokens=16000,
+    thinking={
+        "type": "enabled",
+        "budget_tokens": 10000
+    },
+    messages=[
+        {"role": "user", "content": "分析这段代码的性能瓶颈..."}
+    ]
+)
+```
+
+### 通过 Amazon Bedrock 使用
+
+```python
+import boto3
+import json
+
+client = boto3.client("bedrock-runtime", region_name="us-east-1")
+
+response = client.invoke_model(
+    modelId="anthropic.claude-opus-4-6-v1",
+    body=json.dumps({
+        "anthropic_version": "bedrock-2023-05-31",
+        "max_tokens": 1024,
+        "messages": [
+            {"role": "user", "content": "Hello, Claude!"}
+        ]
+    })
+)
+```
+
+### 通过 OpenRouter 使用
+
+```python
+import openai
+
+client = openai.OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key="your-openrouter-key"
+)
+
+response = client.chat.completions.create(
+    model="anthropic/claude-opus-4-6",
     messages=[
         {"role": "user", "content": "Hello, Claude!"}
     ]
