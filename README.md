@@ -203,6 +203,82 @@ response = client.chat.completions.create(
 )
 ```
 
+## 故障排除："No models available" 问题
+
+如果你在 Cursor Settings > Models 中输入 `claude-opus-4-6` 后看到 **"No models available"** 错误，请按以下步骤逐一排查：
+
+### 原因一：需要配置 Anthropic API Key（最常见）
+
+自 2026 年 1 月起，Anthropic 封锁了通过消费者订阅 OAuth token 的自动访问。现在需要手动配置 API Key：
+
+1. 前往 [console.anthropic.com](https://console.anthropic.com/) 注册/登录
+2. 在 **API Keys** 页面生成一个新的 API Key
+3. 回到 Cursor，进入 **Settings > Models > API Keys**
+4. 展开 **API Keys** 部分，在 **Anthropic API Key** 栏填入你的 Key
+5. 保存后重新尝试添加模型
+
+### 原因二：模型名称格式问题
+
+Cursor 的模型验证可能不识别短名称 `claude-opus-4-6`。尝试使用**完整的带日期后缀**的模型名称：
+
+```
+claude-opus-4-6-20260205
+```
+
+在 Settings > Models > Model Names 输入框中输入上述名称后点击 **Add**。
+
+### 原因三：Cursor 版本过旧
+
+确保你的 Cursor 是最新版本：
+1. 点击 Cursor 菜单 > **Check for Updates**
+2. 或从 [cursor.sh](https://cursor.sh) 重新下载安装最新版
+
+### 原因四：缓存损坏
+
+清除 Cursor 的模型缓存：
+
+**macOS：**
+```bash
+rm -rf ~/Library/Application\ Support/Cursor/Cache
+rm -rf ~/Library/Application\ Support/Cursor/CachedData
+```
+
+**Windows：**
+```bash
+del /q %APPDATA%\Cursor\Cache\*
+del /q %APPDATA%\Cursor\CachedData\*
+```
+
+**Linux：**
+```bash
+rm -rf ~/.config/Cursor/Cache
+rm -rf ~/.config/Cursor/CachedData
+```
+
+清除后完全退出并重启 Cursor。
+
+### 原因五：使用强制刷新
+
+在 Cursor 中按 `Ctrl + Shift + R`（macOS 为 `Cmd + Shift + R`）强制刷新，然后重新进入模型设置。
+
+### 调试技巧
+
+打开 Cursor 的开发者工具查看详细错误信息：
+- macOS: `Cmd + Option + I`
+- Windows/Linux: `Ctrl + Shift + I`
+
+在 Console 面板中查看是否有关于模型加载或 API 认证的错误日志。
+
+### 推荐的完整操作流程
+
+如果你刚开始使用，建议按此顺序操作：
+
+1. 更新 Cursor 到最新版本
+2. 在 **Settings > Models > API Keys** 中填入 Anthropic API Key
+3. 在 **Settings > Models > Model Names** 中输入 `claude-opus-4-6-20260205` 并点击 Add
+4. 如果仍然失败，清除缓存后重启 Cursor 再试
+5. 回到 Chat 面板，在模型下拉菜单中选择新添加的模型
+
 ## 模型参数
 
 | 参数 | 值 |
